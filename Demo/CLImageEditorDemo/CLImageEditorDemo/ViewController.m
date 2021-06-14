@@ -38,6 +38,35 @@
     */
 }
 
+- (void)customizeToolWithEditor:(CLImageEditor*)editor
+{
+    CLImageToolInfo *tool;
+    
+    tool = [editor.toolInfo subToolInfoWithToolName:@"CLAdjustmentTool" recursive:NO];
+    tool.available = NO;
+    
+    tool = [editor.toolInfo subToolInfoWithToolName:@"CLBlurTool" recursive:NO];
+    tool.available = NO;
+    
+    tool = [editor.toolInfo subToolInfoWithToolName:@"CLRotateTool" recursive:NO];
+    tool.available = NO;
+    
+    tool = [editor.toolInfo subToolInfoWithToolName:@"CLClippingTool" recursive:NO];
+    tool.available = NO;
+    
+    tool = [editor.toolInfo subToolInfoWithToolName:@"CLToneCurveTool" recursive:NO];
+    tool.available = NO;
+    
+    tool = [editor.toolInfo subToolInfoWithToolName:@"CLSplashTool" recursive:NO];
+    tool.available = NO;
+    
+    tool = [editor.toolInfo subToolInfoWithToolName:@"CLResizeTool" recursive:NO];
+    tool.available = NO;
+    
+    tool = [editor.toolInfo subToolInfoWithToolName:@"CLEmoticonTool" recursive:NO];
+    tool.available = NO;
+}
+
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
@@ -90,6 +119,8 @@
         tool.available = NO;
         */
         
+        [self customizeToolWithEditor:editor];
+        
         [self presentViewController:editor animated:YES completion:nil];
         //[editor showInViewController:self withImageView:_imageView];
     }
@@ -129,8 +160,9 @@
     
     CLImageEditor *editor = [[CLImageEditor alloc] initWithImage:image];
     editor.delegate = self;
-    
-    [picker pushViewController:editor animated:YES];
+    [self customizeToolWithEditor:editor];
+//    [picker pushViewController:editor animated:YES];
+    [picker presentViewController:editor animated:YES completion:nil];
 }
 /*
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
@@ -152,7 +184,13 @@
     _imageView.image = image;
     [self refreshImageView];
     
-    [editor dismissViewControllerAnimated:YES completion:nil];
+//    [editor dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)imageEditorDidCancel:(CLImageEditor *)editor
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)imageEditor:(CLImageEditor *)editor willDismissWithImageView:(UIImageView *)imageView canceled:(BOOL)canceled
